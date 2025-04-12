@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:16
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: price_guessing
+      POSTGRES_USER: price_guessing_user
+      POSTGRES_PASSWORD: price_guessing_password
+    volumes:
+      - ./database-persisted-data:/var/lib/postgresql/data
+
+  mqtt-broker:
+    image: emqx/emqx:5.8.6
+    restart: always
+    ports:
+      - "1883:1883" # MQTT
+      - "18083:18083" # Dashboard
+    environment:
+      EMQX_DASHBOARD__DEFAULT_USERNAME: admin
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: password
+
+  
+  authentication-service:
+    build: ./backend/authentication-service
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USERNAME: price_guessing_user
+      DB_PASSWORD: price_guessing_password
+      DB_NAME: price_guessing
+      JWT_SECRET: secret
+      JWT_EXPIRATION_IN_DAYS: 1
+      
+    depends_on:
+      - database
+    
+    
+

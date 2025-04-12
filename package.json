@@ -1,0 +1,16 @@
+{
+  "name": "btc-price-guessing",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend/authentication-service",
+    "backend/price-guessing-service",
+    "backend/price-tracker-service"
+  ],
+  "scripts": {
+    "prepare:husky": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
