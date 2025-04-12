@@ -11,6 +11,7 @@ describe('AuthenticationController', () => {
         username: 'testuser',
     };
     const token = 'test-token';
+    const userId = 1;
 
     beforeEach(() => {
         mockJwtService = {
@@ -24,7 +25,7 @@ describe('AuthenticationController', () => {
         controller = new AuthenticationController(mockAuthService, mockJwtService);
 
         mockAuthService.findOrCreateUser.mockResolvedValue({
-            id: 1,
+            id: userId,
             username: loginDTO.username,
         });
         mockJwtService.sign.mockReturnValue(token);
@@ -46,7 +47,7 @@ describe('AuthenticationController', () => {
         it('should call the jwt service to sign the token', async () => {
             await controller.login(loginDTO);
 
-            expect(mockJwtService.sign).toHaveBeenCalledWith({ username: loginDTO.username });
+            expect(mockJwtService.sign).toHaveBeenCalledWith({ username: loginDTO.username, userId: userId });
         });
     });
 });
