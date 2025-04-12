@@ -1,6 +1,7 @@
 import fastifyCookie from '@fastify/cookie';
 import { ConsoleLogger, NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -48,6 +49,14 @@ async function bootstrap() {
     );
 
     await app.register(fastifyCookie);
+
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.MQTT,
+        options: {
+            url: process.env.MQTT_URL,
+        },
+    });
+    await app.startAllMicroservices();
 
     await app.listen(selectedPort, selectedHost);
 }

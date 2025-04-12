@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GuessingModule } from './guessing/guessing.module';
 import { HealthCheckModule } from './health-check/health-check.module';
+import { ScoringModule } from './scoring/scoring.module';
 
 const databaseConnectionModule = TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
@@ -39,6 +40,7 @@ const jwtModule = JwtModule.registerAsync({
         jwtModule,
         HealthCheckModule,
         GuessingModule,
+        ScoringModule,
     ],
     controllers: [],
     providers: [],
