@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Inject, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Inject, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginRequestDTO } from '../dtos/login-request.dto';
@@ -22,6 +22,7 @@ export class AuthenticationController {
         type: LoginResponseDTO,
         description: 'User logged in successfully',
     })
+    @HttpCode(HttpStatus.OK)
     public async login(@Body() loginDTO: LoginRequestDTO): Promise<ILoginResponseDTO> {
         const username = loginDTO.username;
 
