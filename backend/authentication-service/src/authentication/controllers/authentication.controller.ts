@@ -29,6 +29,7 @@ export class AuthenticationController {
         const foundUserInStorage = await this._authenticationService.findOrCreateUser(username);
         const authenticationToken = this._jwtService.sign({
             username: foundUserInStorage.username,
+            userId: foundUserInStorage.id,
         });
 
         return {

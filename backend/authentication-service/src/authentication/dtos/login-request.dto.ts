@@ -11,5 +11,5 @@ export class LoginRequestDTO implements ILoginRequestDTO {
         description: 'The username of the user',
         example: 'johndoe',
     })
-    username!: string;
+    username: string;
 }
