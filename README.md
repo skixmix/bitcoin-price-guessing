@@ -4,6 +4,10 @@ In this app, users make guesses on whether the price of Bitcoin will go **Up** o
 
 > Note: this was made in 1 day for a coding challenge, so of course can still be improved, see the [future enhancements](#future-enhancements) section for more.
 
+#### Architecture overview
+
+![Architecture overview](/architecture.webp)
+
 #### How it works
 
 - You will find a login page, in which you can enter your username.
