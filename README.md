@@ -1,13 +1,31 @@
-# Bitcoin Price Guessing Application 🪙💸
+# Bitcoin (BTC-USD) Price Guessing WebApp 🪙💸
 
-Welcome to the **Bitcoin Price Guessing Application**! In this app, users make guesses on whether the price of Bitcoin will go **Up** or **Down**. The guess is resolved whenever the Bitcoin price changes, and at least **60 seconds** have passed since the guess.
+In this app, users make guesses on whether the price of Bitcoin will go **Up** or **Down**. The guess is resolved whenever the Bitcoin price changes, and at least **60 seconds** have passed since the guess.
 
-> Note: this was made in 1 day for a coding challenge, so of course can still be improved.
+> Note: this was made in 1 day for a coding challenge, so of course can still be improved, see the [future enhancements](#future-enhancements) section for more.
+
+#### How it works
+
+- You will find a login page, in which you can enter your username.
+
+  - If the username is found, you will be logged in;
+  - Otherwise, a new account will be created, starting with score 0;
+  - You will be logged in in both cases.
+
+- On the home page, you will be able to
+
+  - Logout;
+  - See the updated BTCUSD price;
+  - Perform a single guess for UP or DOWN with the respective buttons.
+    - You will not be able to perform a guess if there is already one unresolved in place.
+    - A snackbar will appear to tell you the operation result in any case.
+
+- The login state is persisted through a Cookie and a global local state with Zustand.
+  - Whenever the API call to place a guess fails with code 401 Unauthorized, you will be logged out by the interceptor and brought back to the login page automatically.
 
 ## 📑 Index
 
 1. [🏗️ Project Structure](#project-structure)
-   - [Folders](#folders)
 2. [🧰 Technologies Used](#technologies-used)
 3. [🛠️ Microservices](#backend-microservices)
 4. [⚡ Running Locally](#running-locally)
@@ -25,7 +43,7 @@ This project is composed of a **frontend**, **backend microservices**, a **Postg
 
 ### Folders:
 
-- **`frontend`**: Vite + TypeScript + React frontend application.
+- **`frontend`**: Vite + TypeScript + React + Zustand + MUI (really simple) frontend application.
 - **`backend`**: Microservices for authentication, price guessing, and price tracking.
 - **`docker-compose.yml`**: Docker Compose configuration to set up the entire architecture.
 
@@ -34,10 +52,12 @@ This project is composed of a **frontend**, **backend microservices**, a **Postg
 - **NestJS** with **Fastify** for microservices.
 - **TypeScript** for type safety.
 - **PostgreSQL** with **TypeORM** for the database.
-- **EMQX** as the **MQTT broker** for real-time communication.
+- **EMQX** as the **MQTT broker** for real-time communication between microservices.
 - **Docker** for containerization.
-- **Vite**, **React**, and **TypeScript** for the frontend.
+- **Vite**, **React**, and **Zustand** for the frontend.
 - **Jest** for testing.
+- **JWT** authentication
+- **EventSource** and **SSE** for real-time updates without polling.
 
 ## Backend Microservices
 
@@ -128,6 +148,10 @@ The project is designed to use microservices, which makes it easy to scale the s
 - Move the cron job logic from the price-tracker-service to the PostgreSQL database using stored procedures or triggers.
 
 - Implement user registration and password-based authentication for more security.
+
+- Implement a 401 Unauthorized interception also for the EventSources, in order to logout the user as soon as any 401 is received.
+
+- Some tests could be improved, and the backend e2e tests are missing (other than the health-check).
 
 ## License
 
