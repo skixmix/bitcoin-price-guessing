@@ -23,7 +23,6 @@ services:
       EMQX_DASHBOARD__DEFAULT_USERNAME: admin
       EMQX_DASHBOARD__DEFAULT_PASSWORD: password
 
-  
   authentication-service:
     build: ./backend/authentication-service
     restart: always
@@ -37,10 +36,9 @@ services:
       DB_NAME: price_guessing
       JWT_SECRET: secret
       JWT_EXPIRATION_IN_DAYS: 1
-      
+
     depends_on:
       - database
-
 
   price-guessing-service:
     build: ./backend/price-guessing-service
@@ -57,11 +55,36 @@ services:
       AUTH_COOKIE_NAME: authToken
       JWT_SECRET: secret
       MQTT_URL: mqtt://mqtt-broker:1883
-      
+
     depends_on:
       - authentication-service
       - database
       - mqtt-broker
-    
-    
 
+  btc-usd-tracker:
+    build: ./backend/price-tracker-service
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://price_guessing_user:price_guessing_password@database:5432/price_guessing
+      MQTT_URL: mqtt://mqtt-broker:1883
+      INTERVAL_IN_SECONDS: 15
+    depends_on:
+      - database
+      - mqtt-broker
+      - price-guessing-service
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3003:3003"
+    environment:
+      AUTHENTICATION_SERVICE_ROUTE: http://authentication-service:3000
+      API_SERVICE_ROUTE: http://price-guessing-service:3001
+      AUTH_COOKIE_NAME: authToken
+    depends_on:
+      - database
+      - mqtt-broker
+      - authentication-service
+      - btc-usd-tracker
+      - price-guessing-service

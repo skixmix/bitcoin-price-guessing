@@ -19,7 +19,7 @@ export class ScoreController {
         private readonly _scoreService: IScoreService,
     ) {}
 
-    @Sse('strean')
+    @Sse('stream')
     @UseGuards(JwtAuthGuard)
     @ApiResponse({ status: HttpStatus.OK, description: 'The score stream for this specific user' })
     getScoreStream(@Request() request: IFastifyRequestWithUserId): Observable<MessageEvent<IScoreDTO>> {

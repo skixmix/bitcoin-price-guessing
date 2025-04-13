@@ -17,6 +17,6 @@ export class ScoreDatasource implements IScoreDatasource {
     }
 
     public async upsertScoreForUser(userId: number, score: number): Promise<void> {
-        await this._scoreDatabaseRepository.upsert({ userId: userId, score }, ['user_id']);
+        await this._scoreDatabaseRepository.upsert({ userId: userId, score }, ['userId']);
     }
 }

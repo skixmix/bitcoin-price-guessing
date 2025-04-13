@@ -2,7 +2,7 @@
   "name": "price-guessing-service",
   "version": "0.0.1",
   "description": "The price and score management service for this web application",
-  "author": "",
+  "author": "Simone Tavoletta",
   "private": true,
   "license": "MIT",
   "scripts": {

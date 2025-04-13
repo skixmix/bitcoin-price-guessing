@@ -1,4 +1,3 @@
-# npm run test --workspace=frontend || exit 1
+npm run test --workspace=frontend || exit 1
 npm run test --workspace=backend/authentication-service || exit 1
 npm run test --workspace=backend/price-guessing-service || exit 1
-# npm run test --workspace=backend/price-tracker-service || exit 1

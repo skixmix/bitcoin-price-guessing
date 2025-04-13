@@ -40,6 +40,15 @@ export class PriceController {
                 subscriber,
             });
 
+            this._priceService
+                .getCurrentPriceForPairOrZero(pair)
+                .then((price) => {
+                    this._emitPriceToUser(subscriber, price, pair);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+
             request.raw.on('close', () => {
                 Logger.log(`User ${request.userId} disconnected from ${pair} price stream`);
                 this._userStreams.delete(request.userId);

@@ -1,0 +1,40 @@
+{
+  "name": "price-tracker-service",
+  "version": "1.0.0",
+  "description": "A simple cron that tracks the price of BTCUSD and emits MQTT events",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/btc-usd-tracker.ts",
+    "build": "tsc",
+    "start": "node dist/btc-usd-tracker.js",
+    "debug": "node --inspect -r ts-node/register src/btc-usd-tracker.ts"
+  },
+  "keywords": [],
+  "author": "Simone Tavoletta",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
+    "mqtt": "^5.11.0",
+    "node-cron": "^3.0.3",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@types/mqtt": "^2.5.0",
+    "@types/node": "^22.14.1",
+    "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.11.12",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0",
+    "globals": "^16.0.0"
+  }
+}

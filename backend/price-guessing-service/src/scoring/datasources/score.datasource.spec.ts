@@ -26,7 +26,7 @@ describe('ScoreDatasource', () => {
             const userId = 1;
             const score = 100;
             await datasource.upsertScoreForUser(userId, score);
-            expect(mockScoreDatabaseRepository.upsert).toHaveBeenCalledWith({ userId: userId, score }, ['user_id']);
+            expect(mockScoreDatabaseRepository.upsert).toHaveBeenCalledWith({ userId: userId, score }, ['userId']);
         });
     });
 

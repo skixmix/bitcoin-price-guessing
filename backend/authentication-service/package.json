@@ -2,7 +2,7 @@
   "name": "auth-service",
   "version": "0.0.1",
   "description": "The authentication service for this web application",
-  "author": "",
+  "author": "Simone Tavoletta",
   "private": true,
   "license": "MIT",
   "scripts": {
