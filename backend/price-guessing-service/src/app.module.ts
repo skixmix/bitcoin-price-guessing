@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GuessingModule } from './guessing/guessing.module';
 import { HealthCheckModule } from './health-check/health-check.module';
+import { PriceTrackingModule } from './price-tracking/price-tracking.module';
 import { ScoringModule } from './scoring/scoring.module';
 
 const databaseConnectionModule = TypeOrmModule.forRootAsync({
@@ -18,7 +19,7 @@ const databaseConnectionModule = TypeOrmModule.forRootAsync({
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
     }),
 });
 
@@ -41,6 +42,7 @@ const jwtModule = JwtModule.registerAsync({
         HealthCheckModule,
         GuessingModule,
         ScoringModule,
+        PriceTrackingModule,
     ],
     controllers: [],
     providers: [],

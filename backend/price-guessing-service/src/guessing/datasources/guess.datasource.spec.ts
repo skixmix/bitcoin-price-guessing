@@ -1,4 +1,5 @@
 import { Repository } from 'typeorm';
+import { AvailablePairsEnum } from '../../common/available-pairs.enum';
 import { GuessTypeEnum } from '../dtos/guess.dto';
 import { Guess } from '../models/guess.model';
 import { GuessDatasource } from './guess.datasource';
@@ -11,12 +12,14 @@ describe('GuessDatasource', () => {
     const fakeDate = new Date('2024-01-01T12:00:00Z');
 
     const guess = GuessTypeEnum.DOWN;
+    const pair = AvailablePairsEnum.BTC_USD;
     const currentPrice = 1;
     const expectedGuess: Guess = {
         guess,
-        user_id: userId,
-        price_when_placed: currentPrice,
-        created_at: fakeDate,
+        userId: userId,
+        priceWhenPlaced: currentPrice,
+        referencePair: pair,
+        createdAt: fakeDate,
     } as unknown as Guess;
 
     beforeEach(() => {
@@ -38,11 +41,11 @@ describe('GuessDatasource', () => {
         jest.useRealTimers();
     });
 
-    describe('findUnresolvedGuessByUserId', () => {
+    describe('findUnresolvedGuessByUserIdAndPair', () => {
         it('should find an unresolved guess by user id', async () => {
             mockGuessDatabaseRepository.findOne.mockResolvedValue(expectedGuess);
 
-            const result = await datasource.findUnresolvedGuessByUserId(userId);
+            const result = await datasource.findUnresolvedGuessByUserIdAndPair(userId, pair);
 
             expect(result).toBe(expectedGuess);
         });
@@ -50,7 +53,7 @@ describe('GuessDatasource', () => {
         it('should return null if no unresolved guess is found', async () => {
             mockGuessDatabaseRepository.findOne.mockResolvedValue(null);
 
-            const result = await datasource.findUnresolvedGuessByUserId(userId);
+            const result = await datasource.findUnresolvedGuessByUserIdAndPair(userId, pair);
 
             expect(result).toBeNull();
         });
@@ -62,19 +65,19 @@ describe('GuessDatasource', () => {
         });
 
         it('should place a guess', async () => {
-            await datasource.createGuess(userId, guess, currentPrice);
+            await datasource.createGuess(userId, guess, currentPrice, pair);
 
             expect(mockGuessDatabaseRepository.create).toHaveBeenCalledWith(expectedGuess);
         });
 
         it('should save the guess', async () => {
-            await datasource.createGuess(userId, guess, currentPrice);
+            await datasource.createGuess(userId, guess, currentPrice, pair);
 
             expect(mockGuessDatabaseRepository.save).toHaveBeenCalledWith(expectedGuess);
         });
 
         it('should return the guess', async () => {
-            const result = await datasource.createGuess(userId, guess, currentPrice);
+            const result = await datasource.createGuess(userId, guess, currentPrice, pair);
 
             expect(result).toBe(expectedGuess);
         });

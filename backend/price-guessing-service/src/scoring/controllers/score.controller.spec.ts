@@ -1,6 +1,6 @@
 import { MessageEvent } from '@nestjs/common';
 import { Observable, Subscriber } from 'rxjs';
-import { IFastifyRequestWithUserId } from '../../guards/authentication.guard.interface';
+import { IFastifyRequestWithUserId } from '../../utils/guards/authentication.guard.interface';
 import { IScoreService } from '../services/score.service.interface';
 import { ScoreController } from './score.controller';
 

@@ -1,3 +1,4 @@
+import { AvailablePairsEnum } from '../../common/available-pairs.enum';
 import { GuessTypeEnum } from '../dtos/guess.dto';
 import { GuessEntity } from '../entities/guess.entity';
 import { IGuessRepository } from '../repositories/guess.repository.interface';
@@ -10,12 +11,13 @@ describe('GuessService', () => {
 
     const userId = 1;
     const guess = GuessTypeEnum.DOWN;
+    const pair = AvailablePairsEnum.BTC_USD;
     const currentPrice = 100;
     const placedGuess = new GuessEntity();
 
     beforeEach(() => {
         mockRepository = {
-            findUnresolvedGuessByUserId: jest.fn(),
+            findUnresolvedGuessByUserIdAndPair: jest.fn(),
             createGuess: jest.fn(),
         } as unknown as jest.Mocked<IGuessRepository>;
 
@@ -31,26 +33,26 @@ describe('GuessService', () => {
     });
 
     describe('placeGuess', () => {
-        it('should check if there is already an unresolved guess for this user', async () => {
-            await service.placeGuess(userId, guess, currentPrice);
+        it('should check if there is already an unresolved guess for this user-pair', async () => {
+            await service.placeGuess(userId, guess, currentPrice, pair);
 
-            expect(mockRepository.findUnresolvedGuessByUserId).toHaveBeenCalledWith(userId);
+            expect(mockRepository.findUnresolvedGuessByUserIdAndPair).toHaveBeenCalledWith(userId, pair);
         });
 
         describe('When no previous unresolved guess is found', () => {
             beforeEach(() => {
-                mockRepository.findUnresolvedGuessByUserId.mockResolvedValue(null);
+                mockRepository.findUnresolvedGuessByUserIdAndPair.mockResolvedValue(null);
                 mockRepository.createGuess.mockResolvedValue(placedGuess);
             });
 
             it('should call createGuess from the repository', async () => {
-                await service.placeGuess(userId, guess, currentPrice);
+                await service.placeGuess(userId, guess, currentPrice, pair);
 
-                expect(mockRepository.createGuess).toHaveBeenCalledWith(userId, guess, currentPrice);
+                expect(mockRepository.createGuess).toHaveBeenCalledWith(userId, guess, currentPrice, pair);
             });
 
             it('should return the placed guess', async () => {
-                const result = await service.placeGuess(userId, guess, currentPrice);
+                const result = await service.placeGuess(userId, guess, currentPrice, pair);
 
                 expect(result).toBe(placedGuess);
             });
@@ -58,11 +60,11 @@ describe('GuessService', () => {
 
         describe('When a previous unresolved guess is found', () => {
             beforeEach(() => {
-                mockRepository.findUnresolvedGuessByUserId.mockResolvedValue(placedGuess);
+                mockRepository.findUnresolvedGuessByUserIdAndPair.mockResolvedValue(placedGuess);
             });
 
             it('should throw', async () => {
-                await expect(service.placeGuess(userId, guess, currentPrice)).rejects.toThrow(
+                await expect(service.placeGuess(userId, guess, currentPrice, pair)).rejects.toThrow(
                     'There is already one guess placed that must still be resolved',
                 );
 

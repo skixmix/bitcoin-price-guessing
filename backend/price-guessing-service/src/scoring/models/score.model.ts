@@ -5,7 +5,7 @@ export class Score {
     @PrimaryColumn({
         unique: true,
     })
-    user_id: number;
+    userId: number;
 
     @Column()
     score: number;

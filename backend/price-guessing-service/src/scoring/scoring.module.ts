@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtAuthGuard } from '../guards/authentication.guard';
+import { JwtAuthGuard } from '../utils/guards/authentication.guard';
 import { ScoreController } from './controllers/score.controller';
 import { ScoreDatasource } from './datasources/score.datasource';
 import { Score } from './models/score.model';

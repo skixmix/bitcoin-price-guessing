@@ -26,7 +26,7 @@ describe('ScoreDatasource', () => {
             const userId = 1;
             const score = 100;
             await datasource.upsertScoreForUser(userId, score);
-            expect(mockScoreDatabaseRepository.upsert).toHaveBeenCalledWith({ user_id: userId, score }, ['user_id']);
+            expect(mockScoreDatabaseRepository.upsert).toHaveBeenCalledWith({ userId: userId, score }, ['user_id']);
         });
     });
 
@@ -34,7 +34,7 @@ describe('ScoreDatasource', () => {
         it('should call findOneBy from the repository', async () => {
             const userId = 1;
             await datasource.getScoreByUserId(userId);
-            expect(mockScoreDatabaseRepository.findOneBy).toHaveBeenCalledWith({ user_id: userId });
+            expect(mockScoreDatabaseRepository.findOneBy).toHaveBeenCalledWith({ userId: userId });
         });
     });
 });

@@ -12,11 +12,11 @@ export class ScoreDatasource implements IScoreDatasource {
     ) {}
 
     public async getScoreByUserId(userId: number): Promise<number | null> {
-        const foundScore = await this._scoreDatabaseRepository.findOneBy({ user_id: userId });
+        const foundScore = await this._scoreDatabaseRepository.findOneBy({ userId: userId });
         return foundScore?.score;
     }
 
     public async upsertScoreForUser(userId: number, score: number): Promise<void> {
-        await this._scoreDatabaseRepository.upsert({ user_id: userId, score }, ['user_id']);
+        await this._scoreDatabaseRepository.upsert({ userId: userId, score }, ['user_id']);
     }
 }

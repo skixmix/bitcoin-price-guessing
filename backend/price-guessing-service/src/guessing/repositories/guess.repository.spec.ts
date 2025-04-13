@@ -1,3 +1,4 @@
+import { AvailablePairsEnum } from '../../common/available-pairs.enum';
 import { IGuessDataSource } from '../datasources/guess.datasource.interface';
 import { GuessTypeEnum } from '../dtos/guess.dto';
 import { GuessEntity, IGuessEntity } from '../entities/guess.entity';
@@ -11,7 +12,7 @@ describe('GuessRepository', () => {
 
     beforeEach(() => {
         mockDatasource = {
-            findUnresolvedGuessByUserId: jest.fn(),
+            findUnresolvedGuessByUserIdAndPair: jest.fn(),
             createGuess: jest.fn(),
         } as unknown as jest.Mocked<IGuessDataSource>;
         repository = new GuessRepository(mockDatasource);
@@ -22,12 +23,13 @@ describe('GuessRepository', () => {
         jest.restoreAllMocks();
     });
 
-    describe('findUnresolvedGuessByUserId', () => {
+    describe('findUnresolvedGuessByUserIdAndPair', () => {
         it('should call findUnresolvedGuessByUserId from the datasource', async () => {
             const userId = 1;
-            const result = await repository.findUnresolvedGuessByUserId(userId);
+            const pair = AvailablePairsEnum.BTC_USD;
+            const result = await repository.findUnresolvedGuessByUserIdAndPair(userId, pair);
 
-            expect(mockDatasource.findUnresolvedGuessByUserId).toHaveBeenCalledWith(userId);
+            expect(mockDatasource.findUnresolvedGuessByUserIdAndPair).toHaveBeenCalledWith(userId, pair);
             expect(result).toBeUndefined();
         });
     });
@@ -36,6 +38,7 @@ describe('GuessRepository', () => {
         it('should call createGuess from the datasource and return the correct entity', async () => {
             const userId = 1;
             const guess = GuessTypeEnum.DOWN;
+            const pair = AvailablePairsEnum.BTC_USD;
             const currentPrice = 100;
             const placedAt = new Date();
 
@@ -45,13 +48,13 @@ describe('GuessRepository', () => {
 
             mockDatasource.createGuess.mockResolvedValue({
                 id: 1,
-                user_id: 1,
-                created_at: placedAt,
+                userId: 1,
+                createdAt: placedAt,
             } as Guess);
 
-            const result = await repository.createGuess(userId, guess, currentPrice);
+            const result = await repository.createGuess(userId, guess, currentPrice, pair);
 
-            expect(mockDatasource.createGuess).toHaveBeenCalledWith(userId, guess, currentPrice);
+            expect(mockDatasource.createGuess).toHaveBeenCalledWith(userId, guess, currentPrice, pair);
             expect(result).toEqual(expectedResult);
         });
     });

@@ -1,4 +1,6 @@
-import { IFastifyRequestWithUserId } from '../../guards/authentication.guard.interface';
+import { AvailablePairsEnum } from '../../common/available-pairs.enum';
+import { IPriceService } from '../../price-tracking/services/price.service.interface';
+import { IFastifyRequestWithUserId } from '../../utils/guards/authentication.guard.interface';
 import { GuessResponseDTO } from '../dtos/guess-response.dto';
 import { GuessTypeEnum, IGuessDTO } from '../dtos/guess.dto';
 import { IGuessEntity } from '../entities/guess.entity';
@@ -8,6 +10,7 @@ import { GuessController } from './guess.controller';
 describe('GuessController', () => {
     let controller: GuessController;
     let mockGuessService: jest.Mocked<IGuessService>;
+    let mockPriceService: jest.Mocked<IPriceService>;
 
     const mockRequest: IFastifyRequestWithUserId = {
         userId: 1,
@@ -15,6 +18,7 @@ describe('GuessController', () => {
 
     const mockBody: IGuessDTO = {
         guess: GuessTypeEnum.DOWN,
+        pair: AvailablePairsEnum.BTC_USD,
     };
 
     const mockGuessEntity: IGuessEntity = {
@@ -27,7 +31,11 @@ describe('GuessController', () => {
             placeGuess: jest.fn(),
         } as unknown as jest.Mocked<IGuessService>;
 
-        controller = new GuessController(mockGuessService);
+        mockPriceService = {
+            getCurrentPriceForPairOrZero: jest.fn(),
+        } as unknown as jest.Mocked<IPriceService>;
+
+        controller = new GuessController(mockGuessService, mockPriceService);
 
         mockGuessService.placeGuess.mockResolvedValue(mockGuessEntity);
     });
@@ -39,9 +47,23 @@ describe('GuessController', () => {
 
     describe('placeGuess', () => {
         it('should call the guess service', async () => {
+            const fakePrice = 1;
+            mockPriceService.getCurrentPriceForPairOrZero.mockResolvedValue(fakePrice);
+
             await controller.placeGuess(mockBody, mockRequest);
 
-            expect(mockGuessService.placeGuess).toHaveBeenCalledWith(mockRequest.userId, mockBody.guess, 1);
+            expect(mockGuessService.placeGuess).toHaveBeenCalledWith(
+                mockRequest.userId,
+                mockBody.guess,
+                fakePrice,
+                mockBody.pair,
+            );
+        });
+
+        it('should call the price service', async () => {
+            await controller.placeGuess(mockBody, mockRequest);
+
+            expect(mockPriceService.getCurrentPriceForPairOrZero).toHaveBeenCalledWith(mockBody.pair);
         });
 
         it('should return the guess DTO', async () => {

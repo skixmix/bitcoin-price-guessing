@@ -1,4 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { AvailablePairsEnum } from '../../common/available-pairs.enum';
 import { GuessTypeEnum } from '../dtos/guess.dto';
 
 @Entity({ name: 'guesses' })
@@ -8,14 +9,22 @@ export class Guess {
 
     @Column({ nullable: false })
     @Index()
-    user_id: number;
+    userId: number;
+
+    @Column({
+        nullable: false,
+        type: 'enum',
+        enum: AvailablePairsEnum,
+    })
+    @Index()
+    referencePair: AvailablePairsEnum;
 
     @Column({ default: false })
     @Index()
-    is_resolved: boolean;
+    isResolved: boolean;
 
     @Column({ nullable: false })
-    price_when_placed!: number;
+    priceWhenPlaced!: number;
 
     @Column({
         type: 'enum',
@@ -30,5 +39,5 @@ export class Guess {
         default: () => 'CURRENT_TIMESTAMP',
     })
     @Index()
-    created_at: Date;
+    createdAt: Date;
 }
