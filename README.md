@@ -60,8 +60,11 @@ This project is composed of a **frontend**, **backend microservices**, a **Postg
 - **Docker** for containerization.
 - **Vite**, **React**, and **Zustand** for the frontend.
 - **Jest** for testing.
-- **JWT** authentication
-- **EventSource** and **SSE** for real-time updates without polling.
+- **JWT** authentication.
+- **EventSource** and **SSE** for real-time updates **without** polling.
+- **NVM** for node version management.
+- **Prettier** for code formatting.
+- **ESLint** to ensure best practices.
 
 ## Backend Microservices
 
@@ -110,6 +113,9 @@ If you'd like to run the individual services locally (without Docker), follow th
 
 - Install dependencies:
   ```bash
+  # Do not forget to use the correct Node version
+  nvm use
+  # Install
   npm install
   # Start the service
   npm run start
@@ -148,6 +154,8 @@ The project is designed to use microservices, which makes it easy to scale the s
 - Price Tracker Service: Only needs a single instance because it handles periodic updates.
 
 ## Future Enhancements
+
+- The UI/UX can definitely be improved. The important thing is that APIs are working, so the only limit is imagination.
 
 - Move the cron job logic from the price-tracker-service to the PostgreSQL database using stored procedures or triggers.
 
