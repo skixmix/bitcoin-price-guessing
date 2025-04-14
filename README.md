@@ -43,7 +43,9 @@ In this app, users make guesses on whether the price of Bitcoin will go **Up** o
 
 ## Project Structure
 
-This project is composed of a **frontend**, **backend microservices**, a **PostgreSQL** database and an **EMQX** message broker. It uses **Docker** for easy deployment.
+This project is composed of a **frontend**, **backend microservices**, a **PostgreSQL** database and an **EMQX** message broker. It uses **Docker** and **docker-compose** for easy deployment.
+
+Each folder contains its own Node workspace, so we can manage them with `node run ** --workspace=/path`. You can see an example in the [`.husky/pre-push`](.husky/pre-push) file.
 
 ### Folders:
 
@@ -65,6 +67,7 @@ This project is composed of a **frontend**, **backend microservices**, a **Postg
 - **NVM** for node version management.
 - **Prettier** for code formatting.
 - **ESLint** to ensure best practices.
+- **Husky** to perform pre-push tests.
 
 ## Backend Microservices
 
